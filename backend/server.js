@@ -149,11 +149,18 @@ app.get('/api/audit', async (req, res) => {
   }
 });
 
+// Derive sheet tab name from SHEET_NAME or SHEET_RANGE env vars
+function getSheetName() {
+  if (process.env.SHEET_NAME) return process.env.SHEET_NAME;
+  const range = process.env.SHEET_RANGE || 'Sheet1!A:Z';
+  return range.split('!')[0];
+}
+
 // Update status in sheet
 app.put('/api/sheets/update-status', async (req, res) => {
   try {
     const { rowIndex, status } = req.body;
-    const range = `${process.env.SHEET_NAME}!L${rowIndex}`;
+    const range = `${getSheetName()}!L${rowIndex}`;
     const response = await sheets.spreadsheets.values.update({
       spreadsheetId: process.env.SHEET_ID,
       range: range,
@@ -172,12 +179,13 @@ app.put('/api/sheets/update-status', async (req, res) => {
 app.put('/api/sheets/update-fields', async (req, res) => {
   try {
     const { rowIndex, fields } = req.body;
+    const sheetName = getSheetName();
     const data = [
-      { range: `${process.env.SHEET_NAME}!E${rowIndex}`, values: [[fields.eventName]] },
-      { range: `${process.env.SHEET_NAME}!F${rowIndex}`, values: [[fields.startTime]] },
-      { range: `${process.env.SHEET_NAME}!G${rowIndex}`, values: [[fields.endTime]] },
-      { range: `${process.env.SHEET_NAME}!H${rowIndex}`, values: [[fields.venue]] },
-      { range: `${process.env.SHEET_NAME}!I${rowIndex}`, values: [[fields.date]] },
+      { range: `${sheetName}!E${rowIndex}`, values: [[fields.eventName]] },
+      { range: `${sheetName}!F${rowIndex}`, values: [[fields.startTime]] },
+      { range: `${sheetName}!G${rowIndex}`, values: [[fields.endTime]] },
+      { range: `${sheetName}!H${rowIndex}`, values: [[fields.venue]] },
+      { range: `${sheetName}!I${rowIndex}`, values: [[fields.date]] },
     ];
     const response = await sheets.spreadsheets.values.batchUpdate({
       spreadsheetId: process.env.SHEET_ID,
