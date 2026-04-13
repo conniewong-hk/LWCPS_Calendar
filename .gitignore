@@ -1,0 +1,11 @@
+cat > .gitignore << EOF
+.env
+.env.local
+node_modules/
+backend/node_modules/
+dist/
+build/
+.vscode/
+.idea/
+*.swp
+EOF
