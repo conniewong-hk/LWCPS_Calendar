@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LWCPS 活動申請系統</title>
+<title>LWCPS Google Calendar活動輸入系統</title>
 <script>
 const CFG = {
   CLIENT_ID: "622103144696-qi7mvje8ksr8ul8ufth3ue66nb8kqhbg.apps.googleusercontent.com",
@@ -1049,9 +1049,9 @@ function refreshPreviews(){
 }
 function closeActionModal(){document.getElementById("actionModal").classList.remove("open");currentActionItem=null;}
 function buildBody(type,it,rej,sug){
-  if(type==="ok") return "親愛的 "+it.teacher+" 老師，\n\n您於 "+it.date+" 申請的「"+it.eventName+"」("+it.startTime+"–"+it.endTime+"，"+it.venue+") 已獲批准，並已同步至學校共享日曆。\n\n如有查詢，請聯絡教務處。\nLWCPS 教務處";
-  if(type==="no") return "親愛的 "+it.teacher+" 老師，\n\n很抱歉，您於 "+it.date+" 申請的「"+it.eventName+"」("+it.startTime+"–"+it.endTime+"，"+it.venue+") 未獲批准。\n\n原因："+( rej||"(請填寫原因)")+"\n\n如有查詢，請聯絡教務處。\nLWCPS 教務處";
-  return "親愛的 "+it.teacher+" 老師，\n\n您於 "+it.date+" 申請的「"+it.eventName+"」("+it.startTime+"–"+it.endTime+"，"+it.venue+") 需要修改後方可批准。\n\n修改建議："+(sug||"(請填寫建議)")+"\n\n請按建議修改後重新提交，如有查詢請聯絡教務處。\nLWCPS 教務處";
+  if(type==="ok") return "親愛的 "+it.teacher+" 老師，\n\n您於 "+it.date+" 申請的「"+it.eventName+"」("+it.startTime+"–"+it.endTime+"，"+it.venue+") 已獲批准，並已同步至學校共享日曆。\n\n如有查詢，請聯絡Connie Wong。\nLWCPS Connie Wong";
+  if(type==="no") return "親愛的 "+it.teacher+" 老師，\n\n很抱歉，您於 "+it.date+" 申請的「"+it.eventName+"」("+it.startTime+"–"+it.endTime+"，"+it.venue+") 未獲批准。\n\n原因："+( rej||"(請填寫原因)")+"\n\n如有查詢，請聯絡Connie Wong。\nLWCPS Connie Wong";
+  return "親愛的 "+it.teacher+" 老師，\n\n您於 "+it.date+" 申請的「"+it.eventName+"」("+it.startTime+"–"+it.endTime+"，"+it.venue+") 需要修改後方可批准。\n\n修改建議："+(sug||"(請填寫建議)")+"\n\n請按建議修改後重新提交，如有查詢請聯絡Connie Wong。\nLWCPS Connie Wong";
 }
 async function confirmAction(){
   var item=currentActionItem;if(!item)return;
