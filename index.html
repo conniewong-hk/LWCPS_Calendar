@@ -1235,7 +1235,7 @@ async function sheetsRead(){
       throw new Error(msg);
     }
     const values = await r.json();
-    return (values || []).map(function(row, idx) {
+    return (values || []).slice(1).map(function(row, idx) {
       return {
         id: row[0] || uid(),
         rowIndex: idx + 2,
