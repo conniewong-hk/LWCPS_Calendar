@@ -1292,8 +1292,18 @@ function fileB64(file){return new Promise(function(res,rej){var rd=new FileReade
 // ─── CALENDAR API ────────────────────────────────────────
 async function createCalEvent(item){
   if(!item.date||!item.startTime||!item.endTime)throw new Error("日期或時間無效");
-  var r=await fetch(CFG.API_BASE+"/calendar-events",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({event:{summary:item.eventName,location:item.venue,description:"老師："+item.teacher+"\n時間："+item.startTime+" - "+item.endTime+"\n地點："+item.venue+"\n\n說明："+(item.description||""),start:{dateTime:item.date+"T"+item.startTime+":00"},end:{dateTime:item.date+"T"+item.endTime+":00"},colorId:"2"}})});
-  if(!r.ok){var e=await r.json();throw new Error(e.error||r.status);}
+  var r=await fetch(CFG.API_BASE+"/calendar-events",{method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({event:{
+    summary:item.eventName,
+    location:item.venue,
+    description:"老師："+item.teacher+"\n時間："+item.startTime+" - "+item.endTime+"\n地點："+item.venue+"\n\n說明："+(item.description||""),
+    start:{dateTime:item.date+"T"+item.startTime+":00",timeZone:"Asia/Hong_Kong"},
+    end:{dateTime:item.date+"T"+item.endTime+":00",timeZone:"Asia/Hong_Kong"},
+    colorId:"2"
+  }})});
+  if(!r.ok){
+    var e=await r.json();
+    throw new Error(e.error||(e.details&&JSON.stringify(e.details))||r.status);
+  }
 }
 
 // ─── GMAIL ───────────────────────────────────────────────

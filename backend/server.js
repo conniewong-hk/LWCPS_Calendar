@@ -103,7 +103,22 @@ app.post('/api/calendar-events', async (req, res) => {
   } catch (error) {
     const errorMessage = getGoogleErrorMessage(error);
     console.error('Error creating calendar event:', errorMessage);
-    res.status(500).json({ error: errorMessage });
+    console.error('Full error details:', JSON.stringify(error.response?.data || error.message, null, 2));
+    res.status(500).json({ error: errorMessage, details: error.response?.data || null });
+  }
+});
+
+// Check calendar access
+app.get('/api/calendar-check', async (req, res) => {
+  try {
+    const response = await calendar.calendars.get({
+      calendarId: process.env.CALENDAR_ID,
+    });
+    res.json({ ok: true, summary: response.data.summary, id: response.data.id });
+  } catch (error) {
+    const errorMessage = getGoogleErrorMessage(error);
+    console.error('Calendar check failed:', errorMessage);
+    res.status(500).json({ ok: false, error: errorMessage, details: error.response?.data || null });
   }
 });
 
