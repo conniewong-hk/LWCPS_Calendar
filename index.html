@@ -1149,7 +1149,7 @@ async function loadAuditLog(){
     el.innerHTML='<div class="audit-log">'+entries+"</div>";
   }catch(e){el.innerHTML='<div class="audit-log"><div style="color:var(--text3);font-size:12px;text-align:center;padding:20px">暫無操作記錄</div></div>';}
 }
-async function writeAudit(action, desc){
+async function writeAudit(action, desc, reason){
   try {
     await fetch(CFG.API_BASE + '/audit', {
       method: 'POST',
@@ -1157,7 +1157,8 @@ async function writeAudit(action, desc){
       body: JSON.stringify({
         actor: gUser.email,
         action: action,
-        description: desc
+        description: desc,
+        reason: reason || ''
       })
     });
   } catch(error) {
