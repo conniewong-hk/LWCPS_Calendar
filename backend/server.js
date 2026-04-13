@@ -110,13 +110,13 @@ app.post('/api/calendar-events', async (req, res) => {
 // Add audit log
 app.post('/api/audit', async (req, res) => {
   try {
-    const { action, actor, description } = req.body;
+    const { action, actor, description, reason } = req.body;
     const response = await sheets.spreadsheets.values.append({
       spreadsheetId: process.env.SHEET_ID,
       range: process.env.AUDIT_RANGE || 'AuditLog!A:E',
       valueInputOption: 'USER_ENTERED',
       requestBody: { 
-        values: [[new Date().toISOString(), actor, action, description, '']] 
+        values: [[new Date().toISOString(), actor, action, description, reason || '']] 
       },
     });
     res.json(response.data);
@@ -140,6 +140,7 @@ app.get('/api/audit', async (req, res) => {
       actor: row[1] || '',
       action: row[2] || 'sub',
       description: row[3] || '',
+      reason: row[4] || '',
     }));
     res.json({ entries });
   } catch (error) {
