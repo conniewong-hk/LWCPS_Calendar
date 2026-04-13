@@ -856,6 +856,24 @@ async function submitForm(){
       done++;
       if(dates.length>1) btn.textContent="提交中 ("+done+"/"+dates.length+")...";
     }
+    // Notify admin(s) of new application
+    var adminSubject = "【LWCPS】新活動申請：" + name + "（" + teacher + "）";
+    var adminBody =
+      "收到新的活動場地申請，請登入系統審批。\n\n" +
+      "申請人：" + teacher + "\n" +
+      "電郵：" + email + "\n" +
+      (wa ? "WhatsApp：" + wa + "\n" : "") +
+      "活動名稱：" + name + "\n" +
+      "場地：" + venue + "\n" +
+      "時段：" + start + " – " + end + "\n" +
+      "日期：" + dates.join("、") + "\n" +
+      (desc ? "說明：" + desc + "\n" : "") +
+      (fileUrl !== "無附件" ? "附件：" + fileUrl + "\n" : "");
+    try {
+      await Promise.all(CFG.ADMIN_EMAILS.map(function(addr){ return sendMail(addr, adminSubject, adminBody); }));
+    } catch (mailErr) {
+      console.warn("Admin notification email failed:", mailErr);
+    }
     var msg=dates.length>1?"✅ 已提交 "+dates.length+" 個日期的申請！管理員將盡快審批。":"✅ 提交成功！管理員將盡快審批您的申請。";
     toast(msg,"ok");
     writeAudit("sub","新申請："+name+"（"+teacher+"，"+venue+"，共 "+dates.length+" 日）");
